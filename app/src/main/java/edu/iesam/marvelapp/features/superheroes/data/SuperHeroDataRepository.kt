@@ -16,9 +16,17 @@ class SuperHeroDataRepository(private val xmlLocalDataSource: SuperHeroXmlLocalD
     }
 
     override fun save(superheroes: List<SuperHero>) {
-        TODO("Not yet implemented")
+        xmlLocalDataSource.save(superheroes)
     }
     override fun findById(id: String): SuperHero? {
-        TODO("Not yet implemented")
+        return xmlLocalDataSource.findById(id)
+    }
+
+    override fun deleteAll() {
+        xmlLocalDataSource.deleteAll()
+    }
+
+    override fun deleteById(id: String) {
+        xmlLocalDataSource.deleteById(id)
     }
 }

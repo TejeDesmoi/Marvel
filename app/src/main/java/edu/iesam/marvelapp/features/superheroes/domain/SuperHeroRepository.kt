@@ -4,4 +4,6 @@ interface SuperHeroRepository {
     fun getAll(): List<SuperHero>
     fun save(superheroes: List<SuperHero>)
     fun findById(id: String): SuperHero?
+    fun deleteAll()
+    fun deleteById(id: String)
 }

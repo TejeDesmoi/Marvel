@@ -8,5 +8,4 @@ class LocalAppTime: AppTime {
     override fun currentTimeToLong(): Long {
         return System.currentTimeMillis()
     }
-
 }
