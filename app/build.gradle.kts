@@ -42,7 +42,8 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.kSerialization)
 
-    testImplementation(libs.mockkTest)
+    testImplementation(libs.mockAndroid)
+    testImplementation(libs.mockAgent)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

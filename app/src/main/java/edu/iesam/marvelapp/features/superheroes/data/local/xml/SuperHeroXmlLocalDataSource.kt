@@ -2,7 +2,7 @@ package edu.iesam.marvelapp.features.superheroes.data.local.xml
 
 import android.content.Context
 import edu.iesam.marvelapp.R
-import edu.iesam.marvelapp.core.Cache.AppCacheTTL
+import edu.iesam.marvelapp.core.Cache.AppCache
 import edu.iesam.marvelapp.core.serialization.JsonSerializer
 import edu.iesam.marvelapp.features.superheroes.domain.SuperHero
 
@@ -15,7 +15,7 @@ import edu.iesam.marvelapp.features.superheroes.domain.SuperHero
 class SuperHeroXmlLocalDataSource(
     private val context: Context,
     private val serializer: JsonSerializer<List<SuperHero>>,
-    private val appCache: AppCacheTTL
+    private val appCache: AppCache
 ) {
 
     //Creo la fuente de datos XML: Shared preferences
