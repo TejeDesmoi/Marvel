@@ -3,4 +3,6 @@
 
     <string name="local_source_superhero">Local_source_superhero</string>
     <string name="app_cache">App_cache</string>
+    <string name="error_pagina_text">Error al cargar la pagina</string>
+    <string name="error_image_description">Error Image</string>
 </resources>
