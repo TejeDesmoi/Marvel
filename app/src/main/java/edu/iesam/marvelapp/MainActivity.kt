@@ -5,7 +5,9 @@ import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,10 +15,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import edu.iesam.marvelapp.features.superheroes.data.SuperHeroDataRepository
+import edu.iesam.marvelapp.features.superheroes.data.local.xml.SuperHeroXmlLocalDataSource
+import edu.iesam.marvelapp.features.superheroes.domain.GetSuperHeroUseCase
+import edu.iesam.marvelapp.features.superheroes.presentation.SuperHeroAdapter
 import edu.iesam.marvelapp.features.superheroes.presentation.SuperHeroListViewModel
 
 class MainActivity : AppCompatActivity() {
-private val viewModel: SuperHeroListViewModel by viewModels()
+    private val viewModel: SuperHeroListViewModel by viewModels()
+    private val superHeroAdapter = SuperHeroAdapter()
 
     /**
      * Ciclo de vida: Paso 1 OnCreate
@@ -32,10 +41,17 @@ private val viewModel: SuperHeroListViewModel by viewModels()
         }
         Log.d("MainActivity","OnCreate")
 
+        setupRecyclerView()
         initObserver()
 
         viewModel.loadSuperHeroes()
 
+    }
+
+    private fun setupRecyclerView() {
+        val recyclerView = findViewById<RecyclerView>(R.id.superhero_list)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = superHeroAdapter
     }
 
     private fun initObserver() {
@@ -46,25 +62,29 @@ private val viewModel: SuperHeroListViewModel by viewModels()
     }
 
     private fun bind(uiState: SuperHeroListViewModel.UiState){
+        val spinner = findViewById<ProgressBar>(R.id.action_bar_spinner)
+        val errorLayout = findViewById<View>(R.id.layout_error)
+        val recyclerView = findViewById<RecyclerView>(R.id.superhero_list)
 
         /** Comprobar estado de la vista **/
         if (uiState.isLoading){
-            //show loading
+            spinner.visibility = View.VISIBLE
         } else {
-            //hide loading
+            spinner.visibility = View.GONE
         }
 
         if (uiState.hasError){
-            //show error
+            errorLayout.visibility = View.VISIBLE
         } else {
-            //hide error
+            errorLayout.visibility = View.GONE
         }
 
         uiState.superHeroes?.let{ superHeroes ->
-            if (superHeroes.isEmpty()){
-                //muestra la pantalla un listado vacio
+            if (superHeroes.isNotEmpty()){
+                recyclerView.visibility = View.VISIBLE
+                superHeroAdapter.updateList(superHeroes)
             } else {
-                //muestra la pantalla una lista de superheroes
+                //muestra la pantalla una lista vacia de superheroes
             }
         }
     }
