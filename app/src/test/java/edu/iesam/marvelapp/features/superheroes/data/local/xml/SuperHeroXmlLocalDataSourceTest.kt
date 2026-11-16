@@ -67,14 +67,14 @@ class SuperHeroXmlLocalDataSourceTest {
         every { sharedPref.getString(key, null) } returns "[json]"
         every { serializer.fromJson("[json]") } returns heroes
 
-        assertEquals(heroes, dataSource.getAll())
+        assertEquals(heroes, dataSource.findAll())
     }
 
     @Test
     fun `getAll devuelve vacio y no deserializa si la cache ha expirado`() {
         every { appCache.isExpired(key, ttl) } returns true
 
-        val result = dataSource.getAll()
+        val result = dataSource.findAll()
 
         assertTrue(result.isEmpty())
         verify(exactly = 0) { serializer.fromJson(any()) }
@@ -85,7 +85,7 @@ class SuperHeroXmlLocalDataSourceTest {
         every { appCache.isExpired(key, ttl) } returns false
         every { sharedPref.getString(key, null) } returns null
 
-        assertTrue(dataSource.getAll().isEmpty())
+        assertTrue(dataSource.findAll().isEmpty())
         verify(exactly = 0) { serializer.fromJson(any()) }
     }
 
