@@ -6,4 +6,5 @@ interface SuperHeroRepository {
     fun findById(id: String): SuperHero?
     fun deleteAll()
     fun deleteById(id: String)
+    fun update(superHero: SuperHero)
 }

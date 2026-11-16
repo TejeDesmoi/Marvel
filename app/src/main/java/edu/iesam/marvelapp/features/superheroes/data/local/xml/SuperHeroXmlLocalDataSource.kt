@@ -35,7 +35,7 @@ class SuperHeroXmlLocalDataSource(
     }
 
     //Metodo para recuperar una lista de superhero
-    public fun getAll(): List<SuperHero> {
+    public fun findAll(): List<SuperHero> {
         if (!appCache.isExpired(keySuperHero,ttl)) {
             val json: String? = sharedPref.getString(keySuperHero, null)
             json?.let {
@@ -48,7 +48,7 @@ class SuperHeroXmlLocalDataSource(
     }
 
     fun findById(id: String): SuperHero? {
-        val superheroes: List<SuperHero> = getAll()
+        val superheroes: List<SuperHero> = findAll()
         val superhero: SuperHero? = superheroes.find {
             it.id == id
         }
@@ -56,7 +56,7 @@ class SuperHeroXmlLocalDataSource(
     }
 
     fun deleteById(id: String) {
-        save(getAll().filterNot { it.id == id })
+        save(findAll().filterNot { it.id == id })
     }
 
     fun deleteAll() {
@@ -65,6 +65,12 @@ class SuperHeroXmlLocalDataSource(
             apply()
         }
         appCache.updateTime(keySuperHero)
+    }
+
+    fun update(superHero: SuperHero){
+        val superHeroes = findAll().filterNot { it.id == superHero.id }.toMutableList()
+        superHeroes.add(superHero)
+        save(superHeroes)
     }
 
     companion object {

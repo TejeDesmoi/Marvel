@@ -33,14 +33,14 @@ class SuperHeroDataRepositoryTest {
     fun `getAll devuelve la lista del data source`() {
         //Given
         val heroes = listOf(hero("1"), hero("2"))
-        every { xmlLocalDataSource.getAll() } returns heroes
+        every { xmlLocalDataSource.findAll() } returns heroes
 
         //When
         val result = repository.getAll()
 
         //Then
         assertEquals(heroes, result)
-        verify(exactly = 1) { xmlLocalDataSource.getAll() }
+        verify(exactly = 1) { xmlLocalDataSource.findAll() }
     }
 
     @Test
