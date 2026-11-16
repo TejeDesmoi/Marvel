@@ -1,30 +1,44 @@
 package edu.iesam.marvelapp
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import edu.iesam.marvelapp.core.Cache.AppCacheTTL
+import edu.iesam.marvelapp.core.Time.LocalAppTime
+import edu.iesam.marvelapp.core.serialization.KotlinJsonSerializer
 import edu.iesam.marvelapp.features.superheroes.data.SuperHeroDataRepository
 import edu.iesam.marvelapp.features.superheroes.data.local.xml.SuperHeroXmlLocalDataSource
 import edu.iesam.marvelapp.features.superheroes.domain.GetSuperHeroUseCase
+import edu.iesam.marvelapp.features.superheroes.domain.SuperHero
 import edu.iesam.marvelapp.features.superheroes.presentation.SuperHeroAdapter
 import edu.iesam.marvelapp.features.superheroes.presentation.SuperHeroListViewModel
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel: SuperHeroListViewModel by viewModels()
+
+
+    private val viewModel: SuperHeroListViewModel by viewModels{
+        SuperHeroListViewModel.factory(GetSuperHeroUseCase(
+            SuperHeroDataRepository(
+                SuperHeroXmlLocalDataSource(
+                    this,
+                    KotlinJsonSerializer.create(),
+                    AppCacheTTL(
+                        this,
+                        LocalAppTime()
+                    )
+                )
+            )
+        )
+        )
+    }
     private val superHeroAdapter = SuperHeroAdapter()
 
     /**
@@ -84,7 +98,13 @@ class MainActivity : AppCompatActivity() {
                 recyclerView.visibility = View.VISIBLE
                 superHeroAdapter.updateList(superHeroes)
             } else {
-                //muestra la pantalla una lista vacia de superheroes
+                Log.d("MainActivity", "No hay heroes en la lista\nCargando lista de prueba")
+                recyclerView.visibility = View.VISIBLE
+                val superTest = mutableListOf<SuperHero>(
+                    SuperHero("1","Spiderman","spider",""),
+                    SuperHero("2","Batman","bat",""),
+                    SuperHero("3","Superman","super",""))
+                superHeroAdapter.updateList(superTest)
             }
         }
     }

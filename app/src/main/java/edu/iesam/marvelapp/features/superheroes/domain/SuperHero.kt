@@ -1,7 +1,9 @@
 package edu.iesam.marvelapp.features.superheroes.domain
 
 import android.media.Image
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SuperHero(
     val id: String,
     val name: String,
